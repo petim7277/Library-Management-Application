@@ -1,35 +1,37 @@
 package com.Elibrary.demo.controllers;
 
 import com.Elibrary.demo.Dtos.Request.BookRequest;
-import com.Elibrary.demo.Dtos.Request.LibrarianLoginRequest;
-import com.Elibrary.demo.Dtos.Request.LibrarianRegisterRequest;
+import com.Elibrary.demo.Dtos.Request.LoginRequest;
+import com.Elibrary.demo.Dtos.Request.RegisterRequest;
 import com.Elibrary.demo.Dtos.Response.ApiResponse;
 import com.Elibrary.demo.Dtos.Response.BookResponse;
 import com.Elibrary.demo.Dtos.Response.LibrarianLoginResponse;
 import com.Elibrary.demo.Dtos.Response.LibrarianRegisterResponse;
 import com.Elibrary.demo.Exceptions.BookExistException;
-import com.Elibrary.demo.Exceptions.InvalidDetailsException;
+import com.Elibrary.demo.Exceptions.InvalidUsernameException;
 import com.Elibrary.demo.Exceptions.UserExistException;
-import com.Elibrary.demo.data.models.Books;
 import com.Elibrary.demo.data.models.Librarian;
 import com.Elibrary.demo.services.LibrarianService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
+@RequestMapping("api/v1/Library-Application/")
+@CrossOrigin(origins = "*")
+@AllArgsConstructor
 public class LibrarianController {
-    @Autowired
- private LibrarianService librarianService;
+
+ private final LibrarianService librarianService;
 
  @PostMapping("/LibrarianRegister")
-    public ResponseEntity<?> register(@RequestBody LibrarianRegisterRequest librarianRegisterRequest) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest librarianRegisterRequest) {
      LibrarianRegisterResponse registerResponse = new LibrarianRegisterResponse();
      Librarian librarian = null;
      try {
@@ -44,13 +46,13 @@ public class LibrarianController {
  }
 
  @PostMapping("/LibrarianLogin")
-     public ResponseEntity<?> login(@RequestBody LibrarianLoginRequest librarianLoginRequest) {
+     public ResponseEntity<?> login(@RequestBody LoginRequest librarianLoginRequest) {
      LibrarianLoginResponse librarianLoginResponse = new LibrarianLoginResponse();
      try {
       librarianService.logIn(librarianLoginRequest) ;
       librarianLoginResponse.setRequestResponse("Librarian has been successfully Logged in");
       return new ResponseEntity<>(new ApiResponse(true,librarianLoginResponse, librarianLoginResponse.getRequestResponse()),OK);
-     }catch (InvalidDetailsException invalidDetailsException){
+     }catch (InvalidUsernameException invalidDetailsException){
          librarianLoginResponse.setRequestResponse(invalidDetailsException.getMessage());
          return new ResponseEntity<>(new ApiResponse(false,librarianLoginResponse,invalidDetailsException.getMessage()),BAD_REQUEST);
      }

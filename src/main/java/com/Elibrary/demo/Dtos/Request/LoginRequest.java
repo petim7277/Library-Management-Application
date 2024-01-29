@@ -1,7 +1,9 @@
 package com.Elibrary.demo.Dtos.Request;
+import lombok.Data;
 
-public class UserLoginRequest {
+@Data
+public class LoginRequest {
     private String name;
-    private String password;
     private String email;
+    private String password;
 }

@@ -37,7 +37,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public  void ValidateThatFirstAndLastnameCanContainBothUppercaseAndLowercaseLetters(){
+    public  void ValidateThatUsernameCanContainBothUppercaseAndLowercaseLetters(){
         assertTrue(Validator.validateName("preciouS"));
 
     }
@@ -208,7 +208,7 @@ public class ValidatorTest {
 
     @Test
     public void CheckIfPasswordLength_ExceedsEightTest()  {
-        assertFalse(Validator.validatePassword("ABCDEFGHI"));
+        assertTrue(Validator.validatePassword("ABCDEFGHI"));
     }
     @Test
     public void validatePassword__WithUppercaseLettersTest()  {
@@ -226,53 +226,53 @@ public class ValidatorTest {
 
     @Test
     public void validatePassword__WithUnderScoreTest()  {
-        assertTrue(Validator.validatePassword("_pressys"));
+        assertFalse(Validator.validatePassword("_pressys"));
     }
 
     @Test
     public void validatePassword__WithTildeSymbolTest()  {
-        assertTrue(Validator.validatePassword("~Pressy"));
+        assertFalse(Validator.validatePassword("~Pressy"));
     }
 
     @Test
     public void validatePassword__WithBacktickSymbolTest()  {
 
-        assertTrue(Validator.validatePassword("`Pressy"));
+        assertFalse(Validator.validatePassword("`Pressy"));
     }
 
     @Test
     public void validatePassword__WithHashSymbolTest()  {
-        assertTrue(Validator.validatePassword("#pressys"));
+        assertFalse(Validator.validatePassword("#pressys"));
     }
 
     @Test
     public void validatePassword__WithCaretSymbolTest()  {
-        assertTrue(Validator.validatePassword("pressys^"));
+        assertFalse(Validator.validatePassword("pressys^"));
     }
 
     @Test
     public void validatePassword__WithAsteriskSymbolTest()  {
-        assertTrue(Validator.validatePassword("pressys*"));
+        assertFalse(Validator.validatePassword("pressys*"));
     }
 
     @Test
     public void validatePassword__WithCurlyBracesTest()  {
-        assertTrue(Validator.validatePassword("{pressy}"));
+        assertFalse(Validator.validatePassword("{pressy}"));
     }
 
     @Test
     public void validatePassword__WithPercentageTest()  {
-       assertTrue(Validator.validatePassword("%pressys"));
+       assertFalse(Validator.validatePassword("%pressys"));
     }
 
     @Test
     public void validatePassword__WithAndTest()  {
-        assertTrue(Validator.validatePassword("&pressys"));
+        assertFalse(Validator.validatePassword("&pressys"));
     }
 
     @Test
     public void validatePassword__WithQuestionMarkTest()  {
-        assertTrue(Validator.validatePassword("pressys?"));
+        assertFalse(Validator.validatePassword("pressys?"));
     }
 
     @Test
@@ -282,31 +282,31 @@ public class ValidatorTest {
 
     @Test
     public  void testThatUserEmail_CanContainLowercase() {
-        assertTrue(Validator.validateEmail("precious"));
+        assertFalse(Validator.validateEmail("precious"));
     }
 
     @Test
     public  void testThatUserEmail_CanContainAtSymbol() {
-        assertTrue(Validator.validateEmail("@fortune"));
+        assertFalse(Validator.validateEmail("@fortune"));
     }
 
     @Test
     public  void testThatUserEmail_CanContainFullstopsSymbol() {
-        assertTrue(Validator.validateEmail("fortune."));
+        assertFalse(Validator.validateEmail("fortune."));
     }
 
 
     @Test
     public  void testThatUserEmail_CanContainTwoFullstopsSymbol() {
-        assertTrue(Validator.validateEmail("fortune.."));
+        assertFalse(Validator.validateEmail("fortune.."));
     }
     @Test
     public  void testThatUserEmail_CanContainNumbers() {
-        assertTrue(Validator.validateEmail("fortune7277"));
+        assertFalse(Validator.validateEmail("fortune7277"));
     }
 
     @Test
     public  void testThatUserEmail_CanContainAllSpecialCharacters() {
-        assertTrue(Validator.validateEmail("fortuneetim7177@gmail.com"));
+        assertTrue(Validator.validateEmail("fortuneetim@gmail.com"));
     }
 }

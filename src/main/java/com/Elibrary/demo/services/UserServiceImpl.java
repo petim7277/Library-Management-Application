@@ -1,16 +1,15 @@
 package com.Elibrary.demo.services;
 
 import com.Elibrary.demo.Dtos.Request.BookRequest;
-import com.Elibrary.demo.Dtos.Request.LibrarianLoginRequest;
-import com.Elibrary.demo.Dtos.Request.UserRegisterRequest;
-import com.Elibrary.demo.Exceptions.InvalidDetailsException;
+import com.Elibrary.demo.Dtos.Request.LoginRequest;
+import com.Elibrary.demo.Dtos.Request.RegisterRequest;
+import com.Elibrary.demo.Exceptions.InvalidUsernameException;
 import com.Elibrary.demo.Exceptions.UserExistException;
-import com.Elibrary.demo.data.models.Librarian;
 import com.Elibrary.demo.data.models.User;
 import com.Elibrary.demo.data.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import static com.Elibrary.demo.Utils.UserMapper.mapper;
+import static com.Elibrary.demo.Utils.Mapper.userRegisterMapper;
 import static com.Elibrary.demo.Utils.Validator.*;
  @AllArgsConstructor
 @Service
@@ -18,17 +17,17 @@ public class UserServiceImpl implements UserService{
     private  UserRepository userRepository;
 
      @Override
-     public User register(UserRegisterRequest registerRequest)  {
-          if (!checkIfUserAlreadyExist(registerRequest.getUserName())) {
+     public User register(RegisterRequest registerRequest)  {
+          if (!checkIfUserAlreadyExist(registerRequest.getName())) {
               throw new UserExistException("User does not exist ");
           }
-          User user = mapper(registerRequest);
+          User user = userRegisterMapper(registerRequest);
          validator();
       return userRepository.save(user);
 
      }
      @Override
-     public User login(LibrarianLoginRequest loginRequest) throws InvalidDetailsException {
+     public User login(LoginRequest loginRequest) throws InvalidUsernameException {
 
          return null;
      }
@@ -49,19 +48,19 @@ public class UserServiceImpl implements UserService{
      }
 
      public  void validateUserExistence(){
-         UserRegisterRequest registerRequest = new UserRegisterRequest();
-         User user = mapper(registerRequest);
-         if (!user.getUserName().equals(registerRequest.getUserName())) throw  new UserExistException("User May Not Exist") ;
-         if (!user.getUserEmail().equals(registerRequest.getUserEmail())) throw  new UserExistException("User May Not Exist") ;
-         if (!user.getUserPassword().equals(registerRequest.getUserPassword())) throw  new UserExistException("User May Not Exist");
+         RegisterRequest registerRequest = new RegisterRequest();
+         User user = userRegisterMapper(registerRequest);
+         if (!user.getUserName().equals(registerRequest.getName())) throw  new UserExistException("User May Not Exist") ;
+         if (!user.getUserEmail().equals(registerRequest.getEmail())) throw  new UserExistException("User May Not Exist") ;
+         if (!user.getUserPassword().equals(registerRequest.getPassword())) throw  new UserExistException("User May Not Exist");
      }
 
      public void validator () {
-         UserRegisterRequest registerRequest = new UserRegisterRequest();
+         RegisterRequest registerRequest = new RegisterRequest();
 
-         validatePassword(registerRequest.getUserPassword());
-         validateEmail(registerRequest.getUserEmail());
-         validateName(registerRequest.getUserName()) ;
+         validatePassword(registerRequest.getPassword());
+         validateEmail(registerRequest.getEmail());
+         validateName(registerRequest.getName()) ;
 
      }
 
