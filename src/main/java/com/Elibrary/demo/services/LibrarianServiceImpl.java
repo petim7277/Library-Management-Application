@@ -53,25 +53,19 @@ public class LibrarianServiceImpl implements LibrarianService {
 
     @Override
     public boolean checkBookAvailability(BookRequest bookRequest) {
-        Books bookTitle = bookRepository.findByBookTitle(bookRequest.getBookTitle());
-        Books bookAuthor = bookRepository.findByBookAuthor(bookRequest.getBookAuthor());
-       Books books = bookMap(bookRequest) ;
-        if (!books.getBookTitle().equalsIgnoreCase(bookRequest.getBookTitle())) {
-            throw new BookExistException("Book may not Exist based on title");
-        }
-        else if (!books.getBookAuthor().equalsIgnoreCase(bookRequest.getBookAuthor())) {
-            throw new BookExistException("Book May Not Exist based on Author");
-        }
+        Books book = bookRepository.findByBookTitleAndBookAuthor(bookRequest.getBookTitle(),bookRequest.getBookAuthor());
+            if (book == null){
+                throw new BookExistException("Book is Unavailable") ;
+            }
 
-        else
-        return true;
+          return  book != null;
     }
 
     @Override
     public Books lendBooks(BookRequest lendBookRequest)  {
-        Books foundBooks = new Books();
-     if(!checkIfBookExist(lendBookRequest.getBookTitle())){
-       throw new BookExistException("Book May not exist") ;
+        Books foundBooks = bookRepository.findByBookTitle(lendBookRequest.getBookTitle());
+     if(foundBooks == null){
+       throw new BookExistException("Book Does Not Exist") ;
      }
        return bookRepository.save(foundBooks) ;
     }

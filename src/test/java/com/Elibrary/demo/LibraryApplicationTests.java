@@ -1,10 +1,8 @@
 package com.Elibrary.demo;
+import com.Elibrary.demo.Dtos.Request.BookRequest;
 import com.Elibrary.demo.Dtos.Request.LoginRequest;
 import com.Elibrary.demo.Dtos.Request.RegisterRequest;
-import com.Elibrary.demo.Exceptions.InvalidEmailException;
-import com.Elibrary.demo.Exceptions.InvalidPasswordException;
-import com.Elibrary.demo.Exceptions.InvalidUsernameException;
-import com.Elibrary.demo.Exceptions.UserExistException;
+import com.Elibrary.demo.Exceptions.*;
 import com.Elibrary.demo.data.repositories.BookRepository;
 import com.Elibrary.demo.data.repositories.LibrarianRepository;
 import com.Elibrary.demo.services.LibrarianService;
@@ -100,7 +98,57 @@ class LibrarianServiceTests {
 		assertThrows(UserExistException.class,()->librarianService.logIn(loginRequest));
 	}
 
+	@Test
+	public  void  testThatLibrarianCan_AddBooks(){
+		BookRequest bookRequest = new BookRequest();
+		bookRequest.setBookTitle("The God Are Angry");
+		bookRequest.setBookAuthor("Chinua Achebe");
+		bookRequest.setYearOfPublication("1990");
+		librarianService.addBooks(bookRequest);
+		assertEquals(1,bookRepository.count());
+	}
 
+	@Test
+	public  void  testThatLibrarianCan_AddMoreBooks(){
+		BookRequest bookRequest = new BookRequest();
+		bookRequest.setBookTitle("Sweet Sixteen");
+		bookRequest.setBookAuthor("Chinua Achebe");
+		bookRequest.setYearOfPublication("1991");
+		librarianService.addBooks(bookRequest);
+	
+	}
+
+	@Test
+	public  void testThatWhenITryTo_AddAnExistingBook_ThrowsAnException(){
+		BookRequest bookRequest = new BookRequest();
+		bookRequest.setBookTitle("Midlife Crisis");
+		bookRequest.setBookAuthor("Chinua Achebe");
+		bookRequest.setYearOfPublication("1990");
+		assertThrows(BookExistException.class,()->librarianService.addBooks(bookRequest)) ;
+	}
+
+	@Test
+	public  void  testThatALibrarianCan_CheckForAvailableBooks(){
+		BookRequest bookRequest = new BookRequest();
+		bookRequest.setBookTitle("Midlife Crisis");
+		bookRequest.setBookAuthor("Chinua Achebe");
+		bookRequest.setYearOfPublication("1990");
+		assertTrue(	librarianService.checkBookAvailability(bookRequest)	);
+	}
+
+	@Test
+	public  void  testThatABookThat_HasNotBeenAdded_IsNotAvailable(){
+		BookRequest bookRequest = new BookRequest();
+		bookRequest.setBookTitle("Delilah's Fortress");
+		bookRequest.setBookAuthor("Chinua Achebe");
+		bookRequest.setYearOfPublication("1990");
+		assertThrows(BookExistException.class,()->librarianService.checkBookAvailability(bookRequest));
+	}
+
+	@Test
+	public  void  checkTheNumberOf_BooksInTheRepository(){
+		assertEquals(3,bookRepository.count());
+	}
 
 
 }

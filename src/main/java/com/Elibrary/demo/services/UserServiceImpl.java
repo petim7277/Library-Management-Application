@@ -4,8 +4,10 @@ import com.Elibrary.demo.Dtos.Request.BookRequest;
 import com.Elibrary.demo.Dtos.Request.LoginRequest;
 import com.Elibrary.demo.Dtos.Request.RegisterRequest;
 import com.Elibrary.demo.Exceptions.*;
+import com.Elibrary.demo.data.models.Books;
 import com.Elibrary.demo.data.models.Librarian;
 import com.Elibrary.demo.data.models.User;
+import com.Elibrary.demo.data.repositories.BookRepository;
 import com.Elibrary.demo.data.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,9 @@ import static com.Elibrary.demo.Utils.Validator.*;
  @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
-
+    private  LibrarianService librarianService;
     private  UserRepository userRepository;
+    private BookRepository bookRepository;
 
      @Override
      public User register(RegisterRequest registerRequest)  {
@@ -41,8 +44,12 @@ public class UserServiceImpl implements UserService{
      }
 
      @Override
-     public void borrowBook(BookRequest bookRequest) {
-
+     public Books borrowBook(BookRequest bookRequest) {
+         Books foundBook = bookRepository.findByBookTitleAndBookAuthor(bookRequest.getBookTitle(), bookRequest.getBookAuthor());
+         if (foundBook == null) {
+             throw new BookExistException("Book Does Not Exist");
+         }
+        return librarianService.lendBooks(bookRequest);
      }
 
      @Override

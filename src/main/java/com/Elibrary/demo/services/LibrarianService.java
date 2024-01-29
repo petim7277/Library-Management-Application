@@ -6,7 +6,7 @@ import com.Elibrary.demo.data.models.Books;
 import com.Elibrary.demo.data.models.Librarian;
 
 
-public interface LibrarianService {
+public interface LibrarianService  {
    Librarian register(RegisterRequest registerRequest) ;
       Librarian logIn(LoginRequest loginRequest) ;
       Books addBooks(BookRequest lendBookRequest);
