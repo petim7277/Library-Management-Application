@@ -1,4 +1,5 @@
 package com.Elibrary.demo;
+import com.Elibrary.demo.Dtos.Request.LoginRequest;
 import com.Elibrary.demo.Dtos.Request.RegisterRequest;
 import com.Elibrary.demo.Exceptions.InvalidEmailException;
 import com.Elibrary.demo.Exceptions.InvalidPasswordException;
@@ -67,7 +68,7 @@ class LibrarianServiceTests {
 	@Test
 	public  void testThatALibrarianCanRegister(){
 		RegisterRequest registerRequest = new RegisterRequest();
-		registerRequest.setName("Hadassah");
+		registerRequest.setName("danjuma");
 		registerRequest.setPassword("MyP@ssw0rd,");
 		registerRequest.setEmail("exampl123@example.com");
 		librarianService.register(registerRequest) ;
@@ -76,10 +77,27 @@ class LibrarianServiceTests {
 	@Test
 	public  void testThatALibrarianCanRegisterAgain(){
 		RegisterRequest registerRequest = new RegisterRequest();
-		registerRequest.setName("Hadassah");
+		registerRequest.setName("danjuma");
 		registerRequest.setPassword("MyP@ssw0rd,");
 		registerRequest.setEmail("exampl123@example.com");
 		assertThrows(UserExistException.class,()-> librarianService.register(registerRequest));
+	}
+	@Test
+	public  void  testThatLibrarianCan_Login(){
+		LoginRequest loginRequest = new LoginRequest();
+		loginRequest.setName("Hadassah");
+		loginRequest.setPassword("MyP@ssw0rd,");
+		loginRequest.setEmail("exampl123@example.com");
+		librarianService.logIn(loginRequest) ;
+	}
+
+	@Test
+	public  void  testThatALibrarianCan_LoginWithoutRegistering(){
+		LoginRequest loginRequest = new LoginRequest();
+		loginRequest.setName("Joana");
+		loginRequest.setPassword("MyNewP@ssword,");
+		loginRequest.setEmail("joana123@example.com");
+		assertThrows(UserExistException.class,()->librarianService.logIn(loginRequest));
 	}
 
 

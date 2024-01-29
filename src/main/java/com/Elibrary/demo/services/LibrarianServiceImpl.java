@@ -33,11 +33,10 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
      @Override
      public Librarian logIn(LoginRequest loginRequest)  {
-        Librarian foundLibrarian = librarianRepository.findByLibrarianName(loginRequest.getName());
-         if (checkIfLibrarianExist(loginRequest.getName()))
-             throw new InvalidUsernameException("This Librarian Does not exist") ;
-         if (!foundLibrarian.getLibrarianPassword().equalsIgnoreCase(loginRequest.getPassword()))
-             throw  new InvalidUsernameException("Invalid details");
+         if (!checkIfLibrarianExist(loginRequest.getName()))
+             throw new UserExistException("This Librarian Does not exist");
+         Librarian foundLibrarian = librarianRepository.findByLibrarianName(loginRequest.getName());
+         checkUserData(loginRequest);
 
          return librarianRepository.save(foundLibrarian);
      }
@@ -77,17 +76,26 @@ public class LibrarianServiceImpl implements LibrarianService {
        return bookRepository.save(foundBooks) ;
     }
 
-    public  void checkUserData (){
-        LoginRequest loginRequest = new LoginRequest();
+    public  void checkUserData (LoginRequest loginRequest){
         Librarian foundLibrarian = librarianRepository.findByLibrarianName(loginRequest.getName());
+
         if(!foundLibrarian.getLibrarianName().equals(loginRequest.getName())) {
-            throw new InvalidUsernameException("Librarian Name  not found");
+            throw new InvalidDetailsException("Invalid Details [Username does not match]");
+        }
+        if (loginRequest.getName().trim().isEmpty()){
+            throw new UsernameFieldIsEmptyException("Username field must not be empty") ;
         }
         if(!foundLibrarian.getLibrarianEmail().equals(loginRequest.getEmail())) {
-            throw new InvalidUsernameException("Email not found");
+            throw new InvalidDetailsException("Invalid Details[Email does not match] ");
+        }
+        if (loginRequest.getEmail().trim().isEmpty()){
+            throw new EmailFieldIsEmptyException("Email field must not be empty") ;
         }
         if(!foundLibrarian.getLibrarianPassword().equals(loginRequest.getPassword())) {
-            throw new InvalidUsernameException("password not found");
+            throw new InvalidDetailsException("Invalid Details[Password not match]");
+        }
+        if (loginRequest.getPassword().trim().isEmpty()){
+            throw new PasswordFieldIsEmptyException("Password field must not be empty") ;
         }
     }
 
