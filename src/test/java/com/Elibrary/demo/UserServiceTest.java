@@ -4,7 +4,7 @@ import com.Elibrary.demo.Dtos.Request.LoginRequest;
 import com.Elibrary.demo.Dtos.Request.RegisterRequest;
 import com.Elibrary.demo.Exceptions.*;
 import com.Elibrary.demo.data.repositories.UserRepository;
-import com.Elibrary.demo.services.UserServiceImpl;
+import com.Elibrary.demo.services.User.UserServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
